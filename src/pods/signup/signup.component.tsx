@@ -6,8 +6,7 @@ import { TextField } from "final-form-material-ui";
 import Button from "@material-ui/core/Button";
 import { Grid } from "@material-ui/core";
 import { Form, Field } from "react-final-form";
-import { validateForm } from "services/index";
-
+import { validateForm } from "./validation.service";
 
 const submit = (values) => {
   alert(JSON.stringify(values));
