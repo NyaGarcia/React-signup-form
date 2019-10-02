@@ -1,5 +1,5 @@
 import { VALIDATOR_TYPES } from "constants/main.constants";
-import { isGithubAccount } from "services/index";
+import { isGithubAccount } from "pods/signup/index";
 import { ValidationResult } from '@lemoncode/fonk';
 
 export const GithubIdValidator = async (fieldValidatorArgs): Promise<ValidationResult> => {
