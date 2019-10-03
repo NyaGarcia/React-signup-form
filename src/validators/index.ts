@@ -1,2 +1,2 @@
-export * from './match-field.validator';
-export * from './github-id.validator';
+export { MatchFieldValidator } from './match-field.validator';
+export { GithubIdValidator } from './github-id.validator';
