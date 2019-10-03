@@ -1,14 +1,26 @@
 import { validateForm } from 'pods/signup/index';
 
-/*describe('validateForm function tests', () => {
-  it.each`
-  a     | username         | result
-  ${2}  | ${'NyaGarcia'}   | ${true}
-  ${20} | ${'username'}    | ${true}
-  ${-2} | ${'unknown'}     | ${false}
-  ${-2} | ${''}            | ${false}
-  ${-2} | ${0}             | ${false}
-  `('Should return Promise<$result> with $username value', async () => {
-    
-  })
-})*/
+describe('validateForm function tests', () => {
+  beforeEach(() => {
+    fetchMock.resetMocks();
+  });
+
+  test.each`
+    values                                                                                                                                                               | result                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      | validId  | validationResult | success
+    ${{ firstName: 'Nya', lastName: 'García', email: 'nya@gmail.com', repeatEmail: 'nya@gmail.com', id: 'NyaGarcia', password: 'pas2@', repeatPassword: 'pas2@' }}       | ${{ email: { message: '', succeeded: true, type: 'REQUIRED' }, firstName: { message: '', succeeded: true, type: 'REQUIRED' }, id: { message: '', succeeded: true, type: 'GITHUB_ID_VALIDATOR' }, lastName: { message: '', succeeded: true, type: 'REQUIRED' }, password: { message: '', succeeded: true, type: 'PATTERN' }, repeatEmail: { message: '', succeeded: true, type: 'MATCH_FIELD_VALIDATOR' }, repeatPassword: { message: '', succeeded: true, type: 'MATCH_FIELD_VALIDATOR' } }}                                                                                                                                                                                                                                | ${true}  | ${'passed'}      | ${true}
+    ${{ firstName: 'Nya', lastName: 'García', email: 'nya@gmail.com', repeatEmail: 'nya@gmail.com', id: 'NyaGarcia', password: 'pas2', repeatPassword: 'pas2' }}         | ${{ email: { message: '', succeeded: true, type: 'REQUIRED' }, firstName: { message: '', succeeded: true, type: 'REQUIRED' }, id: { message: '', succeeded: true, type: 'GITHUB_ID_VALIDATOR' }, lastName: { message: '', succeeded: true, type: 'REQUIRED' }, password: { message: 'Please provide a valid format.', succeeded: false, type: 'PATTERN' }, repeatEmail: { message: '', succeeded: true, type: 'MATCH_FIELD_VALIDATOR' }, repeatPassword: { message: '', succeeded: true, type: 'MATCH_FIELD_VALIDATOR' } }}                                                                                                                                                                                                 | ${true}  | ${'failed'}      | ${false}
+    ${{ firstName: 'Nya', lastName: 'García', email: 'nya@gmail.com', repeatEmail: 'nya@gmail.com', id: 'NyaGarcia', password: 'pas2@', repeatPassword: 'pas2' }}        | ${{ email: { message: '', succeeded: true, type: 'REQUIRED' }, firstName: { message: '', succeeded: true, type: 'REQUIRED' }, id: { message: '', succeeded: true, type: 'GITHUB_ID_VALIDATOR' }, lastName: { message: '', succeeded: true, type: 'REQUIRED' }, password: { message: '', succeeded: true, type: 'PATTERN' }, repeatEmail: { message: '', succeeded: true, type: 'MATCH_FIELD_VALIDATOR' }, repeatPassword: { message: 'Fields do not match', succeeded: false, type: 'MATCH_FIELD_VALIDATOR' } }}                                                                                                                                                                                                            | ${true}  | ${'failed'}      | ${false}
+    ${{ firstName: 'Nya', lastName: 'García', email: 'nya@gmail.com', repeatEmail: 'nyaGarcia@gmail.com', id: 'NyaGarcia', password: 'pas2@', repeatPassword: 'pas2@' }} | ${{ email: { message: '', succeeded: true, type: 'REQUIRED' }, firstName: { message: '', succeeded: true, type: 'REQUIRED' }, id: { message: '', succeeded: true, type: 'GITHUB_ID_VALIDATOR' }, lastName: { message: '', succeeded: true, type: 'REQUIRED' }, password: { message: '', succeeded: true, type: 'PATTERN' }, repeatEmail: { message: 'Fields do not match', succeeded: false, type: 'MATCH_FIELD_VALIDATOR' }, repeatPassword: { message: '', succeeded: true, type: 'MATCH_FIELD_VALIDATOR' } }}                                                                                                                                                                                                            | ${true}  | ${'failed'}      | ${false}
+    ${{ firstName: 'Nya', lastName: '', email: 'nya@gmail.com', repeatEmail: 'nyaGarcia@gmail.com', id: 'NyaGarciax', password: 'pas2', repeatPassword: 'pas2@' }}       | ${{ email: { message: '', succeeded: true, type: 'REQUIRED' }, firstName: { message: '', succeeded: true, type: 'REQUIRED' }, id: { message: 'Not a valid GitHub ID', succeeded: false, type: 'GITHUB_ID_VALIDATOR' }, lastName: { message: 'Please fill in this mandatory field.', succeeded: false, type: 'REQUIRED' }, password: { message: 'Please provide a valid format.', succeeded: false, type: 'PATTERN' }, repeatEmail: { message: 'Fields do not match', succeeded: false, type: 'MATCH_FIELD_VALIDATOR' }, repeatPassword: { message: 'Fields do not match', succeeded: false, type: 'MATCH_FIELD_VALIDATOR' } }}                                                                                              | ${false} | ${'failed'}      | ${false}
+    ${{ firstName: '', lastName: '', email: '', repeatEmail: '', id: '', password: '', repeatPassword: '' }}                                                             | ${{ email: { message: 'Please fill in this mandatory field.', succeeded: false, type: 'REQUIRED' }, firstName: { message: 'Please fill in this mandatory field.', succeeded: false, type: 'REQUIRED' }, id: { message: 'Please fill in this mandatory field.', succeeded: false, type: 'REQUIRED' }, lastName: { message: 'Please fill in this mandatory field.', succeeded: false, type: 'REQUIRED' }, password: { message: 'Please fill in this mandatory field.', succeeded: false, type: 'REQUIRED' }, repeatEmail: { message: 'Please fill in this mandatory field.', succeeded: false, type: 'REQUIRED' }, repeatPassword: { message: 'Please fill in this mandatory field.', succeeded: false, type: 'REQUIRED' } }} | ${false} | ${'failed'}      | ${false}
+  `(
+    'Should return $validationResult validation result with $values',
+    async ({ values, result, validId, success }) => {
+      fetchMock.mockResponseOnce(JSON.stringify({ login: validId }));
+      const validation = await validateForm(values);
+
+      expect(validation.fieldErrors).toEqual(result);
+      expect(validation.succeeded).toBe(success);
+    }
+  );
+});
