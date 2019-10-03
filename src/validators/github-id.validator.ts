@@ -1,16 +1,18 @@
-import { VALIDATOR_TYPES } from "constants/main.constants";
-import { isGithubAccount } from "pods/signup/index";
+import { VALIDATOR_TYPES } from 'constants/main.constants';
 import { ValidationResult } from '@lemoncode/fonk';
+import { isGithubAccount } from 'pods/signup/index';
 
-export const GithubIdValidator = async (fieldValidatorArgs): Promise<ValidationResult> => {
-  const { value } = fieldValidatorArgs;
+export const GithubIdValidator = async (
+  fieldValidatorArgs
+): Promise<ValidationResult> => {
+  const { value = '', message } = fieldValidatorArgs;
 
   const isValid = await isGithubAccount(value);
 
   const validationResult = {
     succeeded: false,
     type: VALIDATOR_TYPES.GITHUB_ID.TYPE,
-    message: VALIDATOR_TYPES.GITHUB_ID.MESSAGE,
+    message: message || VALIDATOR_TYPES.GITHUB_ID.MESSAGE
   };
 
   if (isValid) {
@@ -18,4 +20,4 @@ export const GithubIdValidator = async (fieldValidatorArgs): Promise<ValidationR
     validationResult.message = '';
   }
   return validationResult;
-}
+};
