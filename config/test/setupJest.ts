@@ -1,4 +1,4 @@
-import { Adapter } from 'enzyme-adapter-react-16';
+import Adapter from 'enzyme-adapter-react-16';
 import { GlobalWithFetchMock } from 'jest-fetch-mock';
 import enzyme from 'enzyme';
 
