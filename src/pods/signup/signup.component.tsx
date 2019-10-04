@@ -16,7 +16,6 @@ const submit = values => {
 const validate = async values => {
   const { fieldErrors } = await validateForm(values);
   const errors = getErrorMessages(fieldErrors);
-  console.log(errors);
   return errors;
 };
 
