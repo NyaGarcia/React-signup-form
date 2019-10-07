@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Signup component Should render correctly 1`] = `
+<WithStyles(ForwardRef(Card))>
+  <WithStyles(ForwardRef(CardHeader))
+    title="Signup"
+  />
+  <WithStyles(ForwardRef(CardContent))>
+    <ReactFinalForm
+      onSubmit={[Function]}
+      render={[Function]}
+      validate={[Function]}
+    />
+  </WithStyles(ForwardRef(CardContent))>
+</WithStyles(ForwardRef(Card))>
+`;
